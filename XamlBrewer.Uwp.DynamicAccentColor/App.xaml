@@ -1,0 +1,52 @@
+﻿<Application x:Class="XamlBrewer.Uwp.DynamicAccentColor.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             RequestedTheme="Light">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                    <Color x:Key="SystemAccentColor">OrangeRed</Color>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="SystemControlHighlightAccentBrush"
+                                     Color="DeepPink" />
+                    <SolidColorBrush x:Key="SystemControlBackgroundAccentBrush"
+                                     Color="DeepPink" />
+                    <SolidColorBrush x:Key="SystemControlForegroundAccentBrush"
+                                     Color="DeepPink" />
+                    <SolidColorBrush x:Key="SystemControlDisabledAccentBrush"
+                                     Color="DeepPink" />
+                    <SolidColorBrush x:Key="SystemControlHighlightAltListAccentHighBrush"
+                                     Color="DeepPink" />
+                    <SolidColorBrush x:Key="SystemControlHighlightAltListAccentMediumBrush"
+                                     Color="DeepPink" />
+                    <SolidColorBrush x:Key="SystemControlHighlightAltListAccentLowBrush"
+                                     Color="DeepPink" />
+                    <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush"
+                                     Color="DeepPink" />
+                    <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush"
+                                     Color="DeepPink" />
+                    <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush"
+                                     Color="DeepPink" />
+                    <SolidColorBrush x:Key="SystemControlHyperlinkTextBrush"
+                                     Color="DeepPink" />
+                    <SolidColorBrush x:Key="ContentDialogBorderThemeBrush"
+                                     Color="DeepPink" />
+                    <SolidColorBrush x:Key="InkToolbarAccentColorThemeBrush"
+                                     Color="DeepPink" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Light">
+                    <Color x:Key="SystemAccentColor">OrangeRed</Color>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+            <ResourceDictionary.MergedDictionaries>
+
+                <!-- Theme resources -->
+                <ResourceDictionary Source="Services/Theming/Theme.xaml" />
+                <!-- Icons -->
+                <ResourceDictionary Source="Services/Icons/Icons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
