@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Windows.Foundation.Metadata;
+using Windows.Phone.UI.Input;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 using XamlBrewer.Uwp.DynamicAccentColor;
@@ -10,7 +12,12 @@ namespace Mvvm.Services
     public static class Navigation
     {
         private static Frame _frame;
-        private static readonly EventHandler<BackRequestedEventArgs> _goBackHandler = async (s, e) => await Navigation.GoBack();
+
+        private static readonly EventHandler<BackRequestedEventArgs> GoBackHandler =
+            async (s, e) => await Navigation.GoBack();
+
+        private static readonly EventHandler<BackPressedEventArgs> GoBackPhoneHandler =
+            async (s, e) => await Navigation.GoBack(e);
 
         public static Frame Frame
         {
@@ -34,17 +41,25 @@ namespace Mvvm.Services
 
         public static void EnableBackButton()
         {
+            if (ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
+            {
+                HardwareButtons.BackPressed -= GoBackPhoneHandler;
+                HardwareButtons.BackPressed += GoBackPhoneHandler;
+
+                return;
+            }
+
             var navManager = SystemNavigationManager.GetForCurrentView();
             navManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-            navManager.BackRequested -= _goBackHandler;
-            navManager.BackRequested += _goBackHandler;
+            navManager.BackRequested -= GoBackHandler;
+            navManager.BackRequested += GoBackHandler;
         }
 
         public static void DisableBackButton()
         {
             var navManager = SystemNavigationManager.GetForCurrentView();
             navManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
-            navManager.BackRequested -= _goBackHandler;
+            navManager.BackRequested -= GoBackHandler;
         }
 
         public static async Task GoBack()
@@ -62,7 +77,7 @@ namespace Mvvm.Services
                     if (_frame.BackStack[_frame.BackStackDepth - 1].SourcePageType == typeof(BackgroundPage))
                     {
                         _frame.GoBack();
-                    } 
+                    }
                 }
 
                 if (_frame.CanGoBack)
@@ -79,6 +94,22 @@ namespace Mvvm.Services
                 // Ignore, wild clicking going on.
                 Debugger.Break();
             }
+        }
+
+        /// <summary>
+        /// Hardware back button processing.
+        /// </summary>
+        public static async Task GoBack(BackPressedEventArgs e)
+        {
+            if (!_frame.CanGoBack)
+            {
+                // Bail out.
+                return;
+            }
+
+            // Stay in the app.
+            e.Handled = true;
+            await GoBack();
         }
 
         private static void CompleteNavigation()
